@@ -1,9 +1,9 @@
-FROM debian:bullseye-slim as builder
+FROM debian:bookworm-slim AS builder
 
-ENV VERSION 2.0.12
+ENV VERSION=3.0.1
 
 RUN apt update \
-  && apt install -y gcc make autoconf flex bison libncurses-dev libreadline-dev curl \
+  && apt install -y make curl build-essential bison m4 flex libncurses5-dev libreadline-dev libssh-dev pkg-config \ 
   && curl -O -L https://bird.network.cz/download/bird-${VERSION}.tar.gz \
   && tar -zxvf bird-${VERSION}.tar.gz \
   && mv bird-${VERSION} /bird \
@@ -13,14 +13,16 @@ RUN apt update \
   && mv doc/bird.conf.example bird.conf \
   && chmod +x bird birdc
 
-FROM alpine:latest
+FROM debian:bookworm-slim 
 
-MAINTAINER Picopock <picopock@163.com>
+LABEL author=picopock<picopock@163.com>
 
-COPY --from=builder /bird/bird /bird/birdc /bird/bird.conf /usr/sbin/
-RUN apk add gcompat \
+COPY --from=builder /bird/bird /bird/birdc /bird/bird.conf /usr/bin/
+
+RUN apt update \ 
+  && apt install -y libssh-4 \
   && mkdir /etc/bird \
-  && mv /usr/sbin/bird.conf /etc/bird/
+  && mv /usr/bin/bird.conf /etc/bird/
 
 EXPOSE 179
 
