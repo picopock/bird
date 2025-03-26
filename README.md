@@ -4,5 +4,5 @@ The BIRD Internet Routing Daemon Project docker configuration.
 ## docker image
 
 ```sh
-docker pull picopock/bird:latest
+docker pull ghcr.io/picopock/bird:latest
 ```

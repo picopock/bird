@@ -1,12 +1,15 @@
+ARG BIRD_VERSION
+
+# 从构建参数获取 bird 版本
 FROM debian:bookworm-slim AS builder
 
-ENV VERSION=3.0.1
+ARG BIRD_VERSION
 
 RUN apt update \
   && apt install -y make curl build-essential bison m4 flex libncurses5-dev libreadline-dev libssh-dev pkg-config \ 
-  && curl -O -L https://bird.network.cz/download/bird-${VERSION}.tar.gz \
-  && tar -zxvf bird-${VERSION}.tar.gz \
-  && mv bird-${VERSION} /bird \
+  && curl -O -L -C - https://bird.network.cz/download/bird-${BIRD_VERSION}.tar.gz \
+  && tar -zxvf bird-${BIRD_VERSION}.tar.gz \
+  && mv bird-${BIRD_VERSION} /bird \
   && cd /bird \
   && ./configure --prefix=/ --bindir=/ \
   && make \
