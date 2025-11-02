@@ -1,7 +1,7 @@
 ARG BIRD_VERSION
 
 # 从构建参数获取 bird 版本
-FROM debian:bookworm-slim AS builder
+FROM debian:trixie-slim AS builder
 
 ARG BIRD_VERSION
 
@@ -16,7 +16,7 @@ RUN apt update \
   && mv doc/bird.conf.example bird.conf \
   && chmod +x bird birdc
 
-FROM debian:bookworm-slim 
+FROM debian:trixie-slim
 
 LABEL author=picopock<picopock@163.com>
 
